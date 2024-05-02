@@ -5,11 +5,54 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <button @click="openModal"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Add Employee
+                    </button>
+
                     <div class="p-6 text-gray-900">
-                        <button @click="openModal"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Add Employee
-                        </button>
+                        <form @submit.prevent="applyFilters">
+                           <div class="row">
+                             <div class="flex flex-col">
+                                <label for="from_date" class="font-medium">From Date</label>
+                                <input v-model="filters.from_date" id="from_date" type="date" class="input-field"
+                                    placeholder="From Date">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="to_date" class="font-medium">To Date</label>
+                                <input v-model="filters.to_date" id="to_date" type="date" class="input-field"
+                                    placeholder="To Date">
+                            </div>
+                           </div>
+                            <div class="flex flex-col">
+                                <label for="email" class="font-medium">Email</label>
+                                <input v-model="filters.email" id="email" type="text" class="input-field"
+                                    placeholder="Email">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="first_name" class="font-medium">First Name</label>
+                                <input v-model="filters.first_name" id="first_name" type="text" class="input-field"
+                                    placeholder="First Name">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="last_name" class="font-medium">Last Name</label>
+                                <input v-model="filters.last_name" id="last_name" type="text" class="input-field"
+                                    placeholder="Last Name">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="company_id" class="font-medium">Select Company</label>
+                                <select v-model="filters.company_id" id="company_id" class="input-field"
+                                    placeholder="Select Company">
+                                    <option value="">Select Company</option>
+                                    <option v-for="company in companies" :key="company.id" :value="company.id">{{
+                        company.name }}</option>
+                                </select>
+                            </div>
+                            <button type="submit"
+                                class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Apply Filters
+                            </button>
+                        </form>
 
                     </div>
 
@@ -17,7 +60,8 @@
                         :pagination="pagination" :loading="loading" @change="handleTableChange">
                         <template #bodyCell="{ column, text, record }">
                             <template v-if="column.key === 'company_id'">
-                                <button @click="openCompanyModal(record.company)" class="text-blue-500 hover:underline">{{ record.company.name }}</button>
+                                <button @click="openCompanyModal(record.company)"
+                                    class="text-blue-500 hover:underline">{{ record.company.name }}</button>
                             </template>
                             <template v-if="column.key === 'action'">
 
@@ -115,8 +159,8 @@
                     </div>
                 </div>
             </div>
-             <!-- Company Modal -->
-             <div v-if="showCompanyModal" class="fixed z-10 inset-0 overflow-y-auto">
+            <!-- Company Modal -->
+            <div v-if="showCompanyModal" class="fixed z-10 inset-0 overflow-y-auto">
                 <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                     <!-- Background overlay -->
                     <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -132,45 +176,41 @@
                                 <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                     <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Company Details</h3>
                                     <!-- Form -->
-                                 
-                                        <div class="mb-4">
-                                            <label for="name"
-                                                class="block text-sm font-medium text-gray-700">Name</label>
-                                            <input v-model="company.name" type="text" id="name" name="name"
-                                                autocomplete="name"
-                                                readonly
-                                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="email"
-                                                class="block text-sm font-medium text-gray-700">Email</label>
-                                            <input v-model="company.email" type="email" id="email" name="email"
-                                                autocomplete="email"
-                                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="image"
-                                                class="block text-sm font-medium text-gray-700">Logo</label>
-                                                <img class="h-50 w-40 mt-2" :src="company.logo" alt="Compnay Image">
-                                            
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="website"
-                                                class="block text-sm font-medium text-gray-700">Website</label>
-                                            <input v-model="company.website" type="text" id="website" name="website"
-                                                autocomplete="website"
-                                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                        </div>
 
-                                        <!-- Modal footer -->
-                                        <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                                           
-                                            <button @click="closeModal"
-                                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm">
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    
+                                    <div class="mb-4">
+                                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                                        <input v-model="company.name" type="text" id="name" name="name"
+                                            autocomplete="name" readonly
+                                            class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                        <input v-model="company.email" type="email" id="email" name="email"
+                                            autocomplete="email"
+                                            class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="image" class="block text-sm font-medium text-gray-700">Logo</label>
+                                        <img class="h-50 w-40 mt-2" :src="company.logo" alt="Compnay Image">
+
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="website"
+                                            class="block text-sm font-medium text-gray-700">Website</label>
+                                        <input v-model="company.website" type="text" id="website" name="website"
+                                            autocomplete="website"
+                                            class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+
+                                        <button @click="closeModal"
+                                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                            Cancel
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -184,9 +224,10 @@
 <script setup>
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3'
+import { Head, usePage, router } from '@inertiajs/vue3'
 import { computed, ref } from 'vue';
 import { message } from 'ant-design-vue';
+const { companies, employees } = usePage().props;
 const showModal = ref(false);
 const showCompanyModal = ref(false);
 const editMode = ref(false);
@@ -204,6 +245,14 @@ const company = ref({
     email: '',
     website: '',
     logo: null,
+});
+const filters = ref({
+    from_date: '',
+    to_date: '',
+    email: '',
+    first_name: '',
+    last_name: '',
+    company_id: '',
 });
 const props = defineProps({
     employees: Object,
@@ -229,9 +278,18 @@ const handleTableChange = (pagination) => {
     const newUrl = `${props.employees.path}?page=${pagination.current}`;
     fetchPaginatedData(newUrl);
 }
+// const fetchPaginatedData = async (url) => {
+//     try {
+//         await router.visit(url, { data: filters.value }); // Use filtersData instead of filters.value
+//     } catch (error) {
+//         console.error('Error fetching data:', error);
+//     } finally {
+//         loading.value = false;
+//     }
+// };
 const fetchPaginatedData = async (url) => {
     try {
-        await router.visit(url);
+        await router.visit(url, { data: filters.value });
     } catch (error) {
     } finally {
         loading.value = false;
@@ -348,6 +406,12 @@ const handleSubmit = async () => {
         errorMessage(error.response.data.message)
     }
 };
+const applyFilters = () => {
+    loading.value = true;
+    const url = `${props.employees.path}?page=${props.employees.current_page}`;
+    fetchPaginatedData(url);
+};
+
 </script>
 <style>
 .custom-class {

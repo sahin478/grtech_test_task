@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\DailyQuotesController;
 use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Foundation\Application;
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware([RestrictAccess::class])->group(function () {
     Route::resource('companies', CompanyController::class);
     Route::resource('employees', EmployeeController::class);
+    Route::get('/daily-quotes', [DailyQuotesController::class, 'index'])->name('daily-quotes.index');
     });
     
 });
